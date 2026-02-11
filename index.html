@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HuskyGuessr - Daily Northeastern Campus Challenge</title>
+    <link rel="stylesheet" href="styles.css?v=10" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css"
+    />
+    <script
+      src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
+      crossorigin
+      async
+      data-callback="initMapKit"
+      data-libraries="map,annotations,overlays"
+      data-token="eyJraWQiOiI1VFFMSzdBNU4zIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiI3QTgyN0hYOFVOIiwiaWF0IjoxNzcwNzU4NTkzLCJleHAiOjE3NzE0MDE1OTl9.dYNXzoAl8un13d_sNvp7UiekQCI-Y3M2HXQJs01LLcQFKpeibyxPQbRCE2mtKvEe-YZb-8if2n-ng-KX-XQXtQ"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.umd.js"></script>
+    <script>
+      window.mapKitLoaded = false;
+      window.initMapKit = function () {
+        console.log("MapKit initialized");
+        window.mapKitLoaded = true;
+      };
+    </script>
+  </head>
+  <body>
+    <!-- Landing Screen -->
+    <div id="landing-screen" class="screen active">
+      <div class="landing-content" id="landing-content">
+        <h1 class="logo">
+          <span class="logo-husky">Husky</span
+          ><span class="logo-guessr">Guessr</span>
+        </h1>
+        <p class="date" id="current-date"></p>
+        <button class="btn-primary" id="play-btn">Play Daily</button>
+        <button class="btn-info" id="info-btn">How to Play</button>
+      </div>
+
+      <!-- Tutorial Panel -->
+      <div class="tutorial-panel" id="tutorial-panel">
+        <div class="tutorial-panel-inner">
+          <!-- Header with steps -->
+          <div class="tutorial-header">
+            <h2>Try Yesterday's Photo</h2>
+            <div class="tutorial-steps-row">
+              <div class="mini-step">
+                <div class="mini-step-num">1</div>
+                <span>Study the campus photo</span>
+              </div>
+              <div class="mini-step">
+                <div class="mini-step-num">2</div>
+                <span>Drop a pin on where you think it was taken</span>
+              </div>
+              <div class="mini-step">
+                <div class="mini-step-num">3</div>
+                <span>See how close you were</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game-like layout -->
+          <div class="tutorial-body">
+            <div class="tutorial-map-col">
+              <div class="tutorial-map-controls">
+                <button id="tutorial-map-type-btn" class="map-toggle">
+                  Standard
+                </button>
+              </div>
+              <div id="tutorial-map" class="tutorial-map"></div>
+              <div class="tutorial-map-bottom">
+                <button
+                  class="btn-guess-tutorial"
+                  id="tutorial-guess-btn"
+                  disabled
+                >
+                  Place a pin to guess
+                </button>
+                <div class="tutorial-score-section" id="tutorial-score-section">
+                  <h4>Your Score</h4>
+                  <div class="tutorial-score" id="tutorial-score">0</div>
+                  <div class="tutorial-score-range">
+                    Scores range from 0 to 1000
+                  </div>
+                  <div class="tutorial-distance" id="tutorial-distance"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tutorial-photo-col" id="tutorial-photo-col">
+              <div class="tutorial-zoomist zoomist-container">
+                <div class="zoomist-wrapper">
+                  <div class="zoomist-image">
+                    <img
+                      id="tutorial-image"
+                      src=""
+                      alt="Yesterday's challenge"
+                      class="tutorial-photo"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+      <div class="game-header">
+        <h2 class="game-logo" id="game-logo">
+          <span class="logo-husky">Husky</span
+          ><span class="logo-guessr">Guessr</span>
+        </h2>
+        <p class="game-date" id="game-date"></p>
+      </div>
+      <div class="game-main">
+        <div class="game-map-container">
+          <div class="map-controls">
+            <button id="map-type-btn" class="map-toggle">Standard</button>
+          </div>
+          <div id="map" class="game-map"></div>
+          <button class="btn-guess" id="guess-btn" disabled>
+            Place a pin to guess
+          </button>
+        </div>
+        <div class="game-photo-container">
+          <div class="game-zoomist zoomist-container">
+            <div class="zoomist-wrapper">
+              <div class="zoomist-image">
+                <img id="game-photo" src="" alt="Guess this location" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+      <div class="game-header">
+        <h2 class="game-logo" id="results-logo">
+          <span class="logo-husky">Husky</span
+          ><span class="logo-guessr">Guessr</span>
+        </h2>
+        <p class="game-date" id="results-date"></p>
+      </div>
+      <div class="results-main">
+        <div class="results-left">
+          <div class="results-map-box">
+            <div id="results-map" class="results-map"></div>
+          </div>
+          <div class="results-bottom-section">
+            <div class="results-score-box">
+              <h3>Your Score</h3>
+              <div class="score-display" id="score-display">0</div>
+              <div class="distance-display" id="distance-display"></div>
+            </div>
+            <div class="results-stats-box">
+              <h3>Leaderboard</h3>
+              <div class="coming-soon">
+                <p>📊 Stats Coming Soon!</p>
+                <p class="coming-soon-detail">
+                  Average score, rankings, and more
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="results-right">
+          <div class="results-photo-box">
+            <div class="results-zoomist zoomist-container">
+              <div class="zoomist-wrapper">
+                <div class="zoomist-image">
+                  <img id="results-photo" src="" alt="Location revealed" />
+                </div>
+              </div>
+            </div>
+            <button class="photo-toggle-btn" id="photo-toggle-btn">
+              View Zoomed Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="script.js?v=10"></script>
+  </body>
+</html>
